@@ -1,0 +1,185 @@
+### 🤖 Assistant
+
+好的，完全没问题。
+
+将产品需求文档（PRD）整理成 Markdown (`.md`) 格式是一个非常专业的做法。它清晰、易于版本控制（例如使用 Git），并且可以被很多开发工具（如 VS Code, Notion, GitHub）完美渲染。
+
+请直接复制以下所有内容，并将其保存为一个名为 `PRD_v2.0.md` 的文件。
+
+---
+
+```markdown
+# AI 智能生产力工作台 - 产品需求文档 (PRD) v2.0
+
+**文档版本：** 2.0
+**最后更新：** 2023-10-27
+**负责人：** [你的名字] (产品负责人), AI 全栈开发专家 (技术顾问)
+
+---
+
+## 1. 产品愿景与概述 (Product Vision & Overview)
+
+### 1.1 产品愿景
+
+打造一个超越传统记事本的“AI 智能生产力工作台”。它将无缝集成笔记记录、AI 辅助思考、任务管理与时间管理，成为学生、知识工作者和终身学习者提升每日效率的核心工具。
+
+### 1.2 产品概述
+
+本产品是一个 Web 应用，用户可以注册登录后，在一个统一的仪表盘界面上进行以下操作：
+*   创建、编辑和管理个人笔记。
+*   利用 AI 对笔记内容进行润色、续写和深度分析。
+*   使用一个独立的 AI 对话伙伴进行开放式问答和创意探索。
+*   管理每日的待办事项列表 (To-do List)。
+*   使用番茄钟来管理工作和休息时间，保持专注。
+
+---
+
+## 2. 核心功能矩阵 (Core Feature Matrix)
+
+#### 模块一：基础架构 (Infrastructure)
+*   **F-01: 用户认证：** 提供用户注册和登录功能，确保数据隔离与安全。
+
+#### 模块二：笔记核心 (Note Taking)
+*   **F-02: 笔记列表：** 集中展示用户的所有笔记，并提供搜索/筛选功能。
+*   **F-03: 笔记编辑器：** 提供一个富文本或 Markdown 编辑器，用于创建和修改笔记内容。
+*   **F-04: 笔记 CRUD 操作：** 支持对笔记的创建 (Create)、读取 (Read)、更新 (Update)、删除 (Delete)。
+
+#### 模块三：AI 增强 (AI Enhancement)
+*   **F-05: 笔记内容 AI 优化：** 在笔记编辑器中，提供“润色”、“续写”等功能，一键优化文本。
+*   **F-06: 笔记内容 AI 洞察：** 对单篇笔记内容进行深度分析，自动生成摘要、关键词和思考题。
+*   **F-07: 独立 AI 对话伙伴：** 提供一个全局的、可随时唤出的 AI 聊天窗口，支持带上下文的多轮对话。
+
+#### 模块四：生产力工具 (Productivity Tools)
+*   **F-08: 全局待办事项 (To-do List)：** 在主页上提供一个常驻的待办事项列表，支持添加、勾选和未完成任务的自动顺延。
+*   **F-09: 番茄钟 (Pomodoro Timer)：** 提供一个可拖拽的计时器组件，支持自定义时长，并通过声音和桌面通知进行提醒。
+
+---
+
+## 3. 详细技术规格 (Detailed Technical Specifications)
+
+### 3.1 前端 (Frontend)
+
+#### 页面与组件 (Pages & Components)
+*   **页面 (Pages):**
+    *   `LoginPage.vue`: 登录页。
+    *   `RegisterPage.vue`: 注册页。
+    *   `DashboardPage.vue`: 用户登录后的主仪表盘，是所有核心组件的容器。
+    *   `NoteEditorPage.vue`: 负责单篇笔记的创建与编辑的全屏页面。
+*   **核心组件 (Core Components):**
+    *   `NavBar.vue`: 全局顶部导航栏，包含 Logo、用户信息和退出按钮。
+    *   `NoteList.vue`: 嵌入在 `DashboardPage` 的侧边栏，展示笔记列表。
+    *   `TodoListWidget.vue`: (小组件) 嵌入在 `DashboardPage` 的指定区域，展示待办事项。
+    *   `PomodoroWidget.vue`: (小组件) 浮动在 `DashboardPage` 上，可自由拖拽。
+    *   `AIChatWidget.vue`: (小组件) 悬浮在 `DashboardPage` 右下角，点击可展开聊天窗口。
+    *   `AIFunctionsMenu.vue`: 在 `NoteEditorPage` 中，被选中文本时出现，提供“润色”等选项。
+    *   `InsightModal.vue`: 用于展示“AI 智能洞察”结果的弹窗。
+
+#### 用户流程 (User Flows)
+1.  **新用户注册与登录：** `RegisterPage` -> 提交信息 -> 成功后跳转 `LoginPage` -> `LoginPage` -> 提交信息 -> 成功后跳转 `DashboardPage`。
+2.  **创建新笔记并获取 AI 洞察：** `DashboardPage` 点击“新建笔记” -> 跳转 `NoteEditorPage` -> 编写内容 -> 点击“智能洞察” -> `InsightModal` 弹出并显示分析结果。
+3.  **使用生产力工具：** 在 `DashboardPage` -> 在 `TodoListWidget` 添加任务 -> 拖动 `PomodoroWidget` 到合适位置并开始计时 -> 点击右下角 `AIChatWidget` 与 AI 对话。
+
+### 3.2 后端 (Backend)
+
+#### API 接口 (API Endpoints - RESTful 风格)
+*   **认证 (`/auth`)**
+    *   `POST /auth/register`: 注册新用户。
+    *   `POST /auth/login`: 用户登录，成功后返回 `JWT`。
+*   **笔记 (`/api/notes`)**
+    *   `GET /api/notes`: 获取当前用户的所有笔记列表。
+    *   `GET /api/notes/{id}`: 获取单篇笔记的详细内容。
+    *   `POST /api/notes`: 创建一篇新笔记。
+    *   `PUT /api/notes/{id}`: 更新一篇指定笔记。
+    *   `DELETE /api/notes/{id}`: 删除一篇指定笔记。
+*   **AI 辅助 (`/api/ai`)**
+    *   `POST /api/ai/polish`: (润色) 接收文本，返回优化后的文本。
+    *   `POST /api/ai/continue`: (续写) 接收文本，返回续写的内容。
+    *   `POST /api/ai/insight`: 接收笔记内容，返回结构化的洞察分析 (JSON)。
+    *   `POST /api/chat`: (独立对话) 接收对话历史，返回 AI 的新回复。
+    *   `GET /api/chat/history`: 获取当前用户的聊天记录。
+    *   `DELETE /api/chat/history`: 清空当前用户的聊天记录。
+*   **待办事项 (`/api/todos`)**
+    *   `GET /api/todos`: 获取用户的待办事项 (包含过去未完成的)。
+    *   `POST /api/todos`: 创建新的待办事项。
+    *   `PUT /api/todos/{id}`: 更新待办事项状态 (如标记为完成)。
+*   **用户设置 (`/api/user`)**
+    *   `GET /api/user/settings`: 获取用户的个性化设置 (如番茄钟时长)。
+    *   `PUT /api/user/settings`: 更新用户的个性化设置。
+
+#### 数据模型 (Data Models)
+*   **`users` 表:**
+    *   `id`: 主键, INT
+    *   `username`: 用户名, VARCHAR, UNIQUE
+    *   `email`: 邮箱, VARCHAR, UNIQUE
+    *   `password_hash`: 加密后的密码, VARCHAR
+    *   `pomodoro_work_duration`: 工作时长 (分钟), INT, Default 25
+    *   `pomodoro_short_break_duration`: 短休息时长 (分钟), INT, Default 5
+    *   `pomodoro_long_break_duration`: 长休息时长 (分钟), INT, Default 15
+    *   `created_at`, `updated_at`: 时间戳
+*   **`notes` 表:**
+    *   `id`: 主键, INT
+    *   `user_id`: 外键 -> `users.id`
+    *   `title`: 标题, VARCHAR
+    *   `content`: 内容, TEXT
+    *   `created_at`, `updated_at`: 时间戳
+*   **`todos` 表:**
+    *   `id`: 主键, INT
+    *   `user_id`: 外键 -> `users.id`
+    *   `text`: 任务内容, VARCHAR
+    *   `is_completed`: 完成状态, BOOLEAN, Default false
+    *   `created_date`: 创建日期, DATE
+    *   `created_at`, `updated_at`: 时间戳
+*   **`chat_messages` 表:**
+    *   `id`: 主键, INT
+    *   `user_id`: 外键 -> `users.id`
+    *   `role`: 角色 ('user' 或 'assistant'), VARCHAR
+    *   `content`: 消息内容, TEXT
+    *   `created_at`: 时间戳
+
+### 3.3 非功能性需求 (Non-Functional Requirements)
+
+*   **安全性 (Security):**
+    *   用户密码必须经过哈希加盐处理后存储。
+    *   所有 API 接口（除注册/登录外）都必须通过 JWT 进行身份验证。
+    *   所有用户输入在存入数据库前必须进行清洗，防止 XSS 和 SQL 注入攻击。
+*   **可用性 (Usability):**
+    *   界面布局应简洁直观，主要功能入口清晰。
+    *   对需要等待网络请求的操作，应有明确的加载状态提示 (Loading Spinner)。
+    *   应用需要进行基础的响应式设计，确保在桌面和主流移动设备浏览器上可用。
+
+---
+
+## 4. 技术栈推荐 (Technology Stack)
+
+*   **前端:** `Vue.js (v3)` + `Vite` + `Vue Router` + `Pinia` (状态管理) + `vue-draggable-resizable` (拖拽组件库)
+*   **后端:** `Python` + `Flask` + `Flask-RESTful` (API) + `Flask-SQLAlchemy` (ORM) + `Flask-JWT-Extended` (认证)
+*   **数据库:** `SQLite` (开发阶段) / `PostgreSQL` (生产环境)
+*   **第三方服务:** `OpenAI API` (用于所有 AI 功能)
+
+---
+
+## 5. 整体开发路线图 (Phased Development Roadmap)
+
+> **核心思想：** 循序渐进，分阶段交付，每个阶段都有可用的产出。
+
+#### 阶段一：核心笔记功能与用户系统 (v1.0 基础)
+1.  **环境搭建:** 初始化前后端项目，配置数据库。
+2.  **后端开发 (认证):** 开发 `users` 表模型和 `/auth` 相关的 API。
+3.  **前端开发 (认证):** 开发 `LoginPage` 和 `RegisterPage`，实现登录注册流程。
+4.  **后端开发 (笔记):** 开发 `notes` 表模型和 `/api/notes` 的所有 CRUD 接口。
+5.  **前端开发 (笔记):** 开发 `DashboardPage` (含 `NoteList`) 和 `NoteEditorPage`，实现完整的笔记管理功能。
+    *   **里程碑 1:** 一个功能完整、可以注册登录并管理笔记的网页应用诞生。
+
+#### 阶段二：AI 赋能与智能增强 (v1.5)
+1.  **后端开发 (AI):** 封装调用 OpenAI API 的服务，并开发 `/api/ai/insight`, `polish` 等接口。
+2.  **前端开发 (AI):** 在 `NoteEditorPage` 中集成 AI 功能菜单和 `InsightModal` 弹窗，并与后端接口联调。
+    *   **里程碑 2:** 应用从普通记事本升级为“智能记事本”。
+
+#### 阶段三：生产力工具集成与最终成型 (v2.0)
+1.  **后端开发 (工具):** 开发 `todos` 和 `chat_messages` 的数据模型与相关 API (`/api/todos`, `/api/chat`)；扩展 `users` 模型并开发 `/api/user/settings` 接口。
+2.  **前端开发 (To-do List):** 开发 `TodoListWidget.vue` 组件并集成到 `DashboardPage`。
+3.  **前端开发 (番茄钟):** 开发 `PomodoroWidget.vue` 组件，实现计时、提醒、拖拽和个性化设置功能。
+4.  **前端开发 (AI Chat):** 开发 `AIChatWidget.vue` 组件，实现独立的 AI 对话功能。
+5.  **整合与优化:** 调整 `DashboardPage` 的整体布局，确保所有组件和谐共存。进行全面的测试和样式优化。
+    *   **里程碑 3:** “AI 智能生产力工作台”完全体诞生！
+```
