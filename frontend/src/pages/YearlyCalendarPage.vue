@@ -216,10 +216,12 @@ const getMonthEvents = (month: number): Event[] => {
 
 const previousYear = () => {
   currentYear.value--
+  loadFromLocalStorage() // 重新加载数据
 }
 
 const nextYear = () => {
   currentYear.value++
+  loadFromLocalStorage() // 重新加载数据
 }
 
 const toggleMonthView = (month: number) => {
@@ -281,6 +283,7 @@ const saveMonthData = () => {
 }
 
 const saveToLocalStorage = () => {
+  console.log('保存的数据:', yearData.value) // 调试信息
   localStorage.setItem('yearly-calendar-data', JSON.stringify(yearData.value))
 }
 
@@ -289,10 +292,15 @@ const loadFromLocalStorage = () => {
   if (saved) {
     try {
       const parsed = JSON.parse(saved)
-      yearData.value = parsed[currentYear.value] || {}
+      yearData.value = parsed || {}
+      console.log('加载的数据:', yearData.value) // 调试信息
     } catch (error) {
       console.error('加载数据失败:', error)
+      yearData.value = {}
     }
+  } else {
+    console.log('没有找到保存的数据')
+    yearData.value = {}
   }
 }
 
