@@ -6,6 +6,13 @@
         <p>登录您的账户</p>
       </div>
 
+      <!-- 快速登录按钮 -->
+      <div class="quick-login">
+        <button @click="quickLogin" class="btn btn-secondary quick-login-btn">
+          ⚡ 快速登录（测试用）
+        </button>
+      </div>
+
       <form @submit.prevent="handleLogin" class="login-form">
         <div class="form-group">
           <label for="email" class="form-label">邮箱</label>
@@ -79,6 +86,30 @@ const handleLogin = async () => {
     console.error('登录失败:', error)
   }
 }
+
+// 快速登录（用于测试）
+const quickLogin = async () => {
+  try {
+    // 使用模拟数据快速登录
+    await authStore.login({
+      email: 'test@example.com',
+      password: 'test123'
+    })
+    router.push('/dashboard')
+  } catch (error) {
+    console.error('快速登录失败:', error)
+    // 如果API调用失败，直接设置模拟状态
+    authStore.token = 'mock-token-' + Date.now()
+    authStore.user = {
+      id: 1,
+      username: '测试用户',
+      email: 'test@example.com'
+    }
+    localStorage.setItem('token', authStore.token)
+    localStorage.setItem('mock-token', authStore.token)
+    router.push('/dashboard')
+  }
+}
 </script>
 
 <style scoped>
@@ -139,6 +170,29 @@ const handleLogin = async () => {
 .login-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.quick-login {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.quick-login-btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.quick-login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
 }
 
 .login-footer {
