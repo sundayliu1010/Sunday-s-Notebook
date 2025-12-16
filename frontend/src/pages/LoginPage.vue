@@ -99,11 +99,14 @@ const quickLogin = async () => {
   } catch (error) {
     console.error('快速登录失败:', error)
     // 如果API调用失败，直接设置模拟状态
+    const now = new Date().toISOString()
     authStore.token = 'mock-token-' + Date.now()
     authStore.user = {
       id: 1,
       username: '测试用户',
-      email: 'test@example.com'
+      email: 'test@example.com',
+      created_at: now,
+      updated_at: now
     }
     localStorage.setItem('token', authStore.token)
     localStorage.setItem('mock-token', authStore.token)
