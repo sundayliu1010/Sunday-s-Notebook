@@ -35,6 +35,12 @@ const router = createRouter({
       name: 'settings',
       component: () => import('@/pages/SettingsPage.vue'),
       meta: { requiresAuth: true }
+    },
+    {
+      path: '/calendar',
+      name: 'yearly-calendar',
+      component: () => import('@/pages/YearlyCalendarPage.vue'),
+      meta: { requiresAuth: true }
     }
   ]
 })

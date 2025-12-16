@@ -7,6 +7,9 @@
 
       <div class="navbar-actions">
         <div class="user-info" v-if="authStore.user">
+          <button @click="goToCalendar" class="calendar-btn" title="年历">
+            📅
+          </button>
           <button @click="goToSettings" class="settings-btn" title="AI设置">
             ⚙️
           </button>
@@ -34,6 +37,10 @@ const handleLogout = () => {
 
 const goToSettings = () => {
   router.push('/settings')
+}
+
+const goToCalendar = () => {
+  router.push('/calendar')
 }
 </script>
 
@@ -105,6 +112,23 @@ const goToSettings = () => {
 
 .settings-btn:hover {
   background: rgba(255, 105, 180, 0.2);
+  transform: translateY(-1px);
+}
+
+.calendar-btn {
+  background: none;
+  border: none;
+  color: #e4e4e7;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  margin-right: 10px;
+}
+
+.calendar-btn:hover {
+  background: rgba(99, 102, 241, 0.2);
   transform: translateY(-1px);
 }
 
